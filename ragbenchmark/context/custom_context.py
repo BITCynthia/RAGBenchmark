@@ -65,9 +65,9 @@ class CustomContext(BaseContext):
         return self._page_number
 
 
-class CustomRAGContext(CustomContext):
+class CustomRagContext(CustomContext):
     """
-    CustomRAGContext is a class that extends CustomContext to include an additional
+    CustomRagContext is a class that extends CustomContext to include an additional
     attribute for score, extracted from a provided context dictionary.
 
     Attributes:
@@ -80,7 +80,7 @@ class CustomRAGContext(CustomContext):
 
     def __init__(self, context_dict: Dict) -> None:
         """
-        Initialize CustomRAGContext with a context dictionary.
+        Initialize CustomRagContext with a context dictionary.
 
         Parameters:
         context_dict (Dict): A dictionary containing context information.
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         "SCORE": 0.91
     }
 
-    custom_rag_context = CustomRAGContext(context_dict)
+    custom_rag_context = CustomRagContext(context_dict)
 
     print("Text:", custom_rag_context.text)
     print("File Path:", custom_rag_context.file_path)

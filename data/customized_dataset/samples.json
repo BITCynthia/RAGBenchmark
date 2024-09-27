@@ -7,7 +7,7 @@
         "1": {
             "QUESTION": "What is the main contribution of the 'Attention is All You Need' paper?",
             "ANSWER": "The main contribution is the introduction of the Transformer model, which uses self-attention mechanisms.",
-            "CONTEXTS": [
+            "RETRIEVED_CONTEXTS": [
                 {
                     "TEXT": "The Transformer model, introduced in the 'Attention is All You Need' paper, relies entirely on self-attention mechanisms and does not use recurrent or convolutional layers.",
                     "FILE_PATH": "data/attention_is_all_you_need.pdf",
@@ -25,7 +25,7 @@
         "2": {
             "QUESTION": "What is self-attention?",
             "ANSWER": "Self-attention is a mechanism that allows the model to weigh the importance of different words.",
-            "CONTEXTS": [
+            "RETRIEVED_CONTEXTS": [
                 {
                     "TEXT": "Self-attention is a mechanism that allows the model to weigh the importance of different words in a sentence when encoding a word.",
                     "FILE_PATH": "data/attention_is_all_you_need.pdf",
@@ -37,7 +37,7 @@
         "3": {
             "QUESTION": "How does the Transformer model handle long-range dependencies?",
             "ANSWER": "",
-            "CONTEXTS": [
+            "RETRIEVED_CONTEXTS": [
                 {
                     "TEXT": "The Transformer model handles long-range dependencies using self-attention mechanisms, which can directly relate any two words in a sentence regardless of their distance.",
                     "FILE_PATH": "data/attention_is_all_you_need.pdf",
@@ -49,7 +49,7 @@
         "4": {
             "QUESTION": "What are the key components of the Transformer model?",
             "ANSWER": "The key components are the encoder and decoder, each with self-attention and feed-forward layers.",
-            "CONTEXTS": [
+            "RETRIEVED_CONTEXTS": [
                 {
                     "TEXT": "The key components of the Transformer model are the encoder and decoder, each composed of multiple layers of self-attention and feed-forward neural networks.",
                     "FILE_PATH": "data/attention_is_all_you_need.pdf",
@@ -61,7 +61,7 @@
         "5": {
             "QUESTION": "What is the role of positional encoding in the Transformer model?",
             "ANSWER": "Positional encoding provides information about the position of words in a sentence.",
-            "CONTEXTS": [
+            "RETRIEVED_CONTEXTS": [
                 {
                     "TEXT": "Positional encoding provides information about the position of words in a sentence, which is crucial since the Transformer model does not use recurrence.",
                     "FILE_PATH": "data/attention_is_all_you_need.pdf",
