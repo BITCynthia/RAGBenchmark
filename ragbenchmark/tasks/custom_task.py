@@ -2,7 +2,7 @@ import os
 import sys
 from typing import List, Dict, Any
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from base_task import BaseTask
 from context.custom_context import CustomContext, CustomRagContext
@@ -82,13 +82,13 @@ class CustomRagTask(CustomTask):
 
 if __name__ == "__main__":
     import json
-    file_path = "data/customized_dataset/baseline.json"
+    file_path = "data/customized_dataset/samples.json"
     with open(file=file_path, mode='r', encoding='utf-8') as f:
         ds_dict = json.load(f)
     tasks = ds_dict["TASKS"]
 
     task_id = next(iter(tasks))
-    a_task = CustomTask({task_id: tasks[task_id]})
+    a_task = CustomRagTask({task_id: tasks[task_id]})
 
     print("task id:", a_task.id)
     print("question:", a_task.question)

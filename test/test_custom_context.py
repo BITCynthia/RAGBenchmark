@@ -19,8 +19,8 @@ class TestCustomContext(unittest.TestCase):
     def test_initialization(self):
         """Test the initialization and properties of CustomContext"""
         self.assertEqual(self.custom_context._text, self.context_dict["TEXT"])
-        self.assertEqual(self.custom_context.file_path, self.context_dict["FILE_PATH"])
-        self.assertEqual(self.custom_context.page_number, self.context_dict["PAGE_NUMBER"])
+        self.assertEqual(self.custom_context._file_path, self.context_dict["FILE_PATH"])
+        self.assertEqual(self.custom_context._page_number, self.context_dict["PAGE_NUMBER"])
 
     def test_file_path_property(self):
         """Test the file_path property"""
@@ -45,9 +45,9 @@ class TestCustomRagContext(unittest.TestCase):
     def test_initialization(self):
         """Test the initialization and properties of CustomRagContext"""
         self.assertEqual(self.custom_rag_context._text, self.context_dict["TEXT"])
-        self.assertEqual(self.custom_rag_context.file_path, self.context_dict["FILE_PATH"])
-        self.assertEqual(self.custom_rag_context.page_number, self.context_dict["PAGE_NUMBER"])
-        self.assertEqual(self.custom_rag_context.score, self.context_dict["SCORE"])
+        self.assertEqual(self.custom_rag_context._file_path, self.context_dict["FILE_PATH"])
+        self.assertEqual(self.custom_rag_context._page_number, self.context_dict["PAGE_NUMBER"])
+        self.assertEqual(self.custom_rag_context._score, self.context_dict["SCORE"])
 
     def test_score_property(self):
         """Test the score property"""
