@@ -1,6 +1,4 @@
 #Dataset
-PubMedQA
-CovidQA-RAG
 HotpotQA
 MS Marco
 HAGRID
