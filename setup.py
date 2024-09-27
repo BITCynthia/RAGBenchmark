@@ -28,6 +28,7 @@ setup(
     author="BITCynthia",
     author_email="cynthia74326@outlook.com",
     description="A benchmark to evaluate performance of RAG (Retrieval-Augmented Generation)",
+    url='https://github.com/BITCynthia/RAGBenchmark',
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     classifiers=[
