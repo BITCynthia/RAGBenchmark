@@ -1,7 +1,7 @@
 {
   "NAME": "transformer",
-  "DOCMENTS": [
-    "data/attention_is_all_you_need.pdf"
+  "DOCUMENTS": [
+    "attention_is_all_you_need.pdf"
   ],
   "TASKS": {
     "1": {
