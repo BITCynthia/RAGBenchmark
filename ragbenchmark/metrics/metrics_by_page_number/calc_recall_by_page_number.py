@@ -1,4 +1,11 @@
+import os
+import sys
+import warnings
 from typing import List
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from tasks.base_task import BaseTask
 
 class RecallByPageNumber:
     """
@@ -47,3 +54,41 @@ class RecallByPageNumber:
             recall_list.append(hit_pages / expected_pages)
 
         return sum(recall_list) / len(recall_list) if recall_list else 0.0
+
+    def calculate_recall_by_page_number_for_a_task(task: BaseTask) -> float:
+        """
+        Calculate the recall by page number for a given task.
+
+        This function compares the baseline contexts and sample contexts of the task by their page numbers
+        and calculates the recall. If no page numbers are provided, a warning is issued and the recall is set to 0.0.
+
+        Parameters:
+        task (BaseTask): The task for which recall is to be calculated. The task should have baseline contexts 
+                        and sample contexts with page numbers.
+
+        Returns:
+        float: The recall by page number for the given task. Returns 0.0 if no page numbers are provided.
+
+        Example:
+        >>> task = CustomTask("1", baseline_task_dict, sample_task_dict)
+        >>> recall = calculate_recall_by_page_number_for_a_task(task)
+        >>> print(recall)
+        0.75
+        """
+
+        baseline_page_number_list = []
+        for baseline_context in task.baseline_contexts:
+            if hasattr(baseline_context, "page_number"):
+                baseline_page_number_list.append(baseline_context.page_number)
+
+        sample_page_number_list = []
+        for sample_context in task.sample_contexts:
+            if hasattr(sample_context, "page_number"):
+                sample_page_number_list.append(sample_context.page_number)
+
+        if not baseline_page_number_list or not sample_page_number_list:
+            warnings.warn("The task does not provide page numbers. Recall is set to 0.0.")
+            return 0.0
+
+        recall_by_page_number = RecallByPageNumber.calculate_recall_by_page_number(baseline_page_number_list, sample_page_number_list)
+        return recall_by_page_number
