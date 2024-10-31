@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import List, Dict, Any
+from typing import Dict, Any, Union, List
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -12,85 +12,109 @@ class CustomTask(BaseTask):
     Custom task class for handling specific tasks with custom contexts.
 
     Attributes:
-    Inherits all attributes from BaseTask.
+    _task_id (str): The unique identifier for the custom task.
 
     Methods:
-    Inherits all methods from BaseTask.
+    - _extract_question: Method to extract the question from the task dictionaries.
+    - _extract_answer: Method to extract the answer from the task dictionary.
+    - _extract_baseline_contexts: Method to extract baseline contexts from the context dictionary.
+    - _extract_sample_contexts: Method to extract sample contexts from the context dictionary.
+    - task_id: Property to get the unique identifier for the custom task.
     """
 
-    def __init__(self, task_dict: Dict[str, Any]) -> None:
+    def __init__(self, task_id: str, baseline_task_dict: Dict[str, Any], sample_task_dict: Dict[str, Any]) -> None:
         """
-        Initialize the CustomTask with a task dictionary.
+        Initialize the CustomTask with a unique identifier and task dictionaries.
 
-        Args:
-        task_dict (Dict[str, Any]): The dictionary containing task information.
+        Parameters:
+        task_id (str): The unique identifier for the task.
+        baseline_task_dict (Dict[str, Any]): The dictionary containing baseline task information.
+        sample_task_dict (Dict[str, Any]): The dictionary containing sample task information.
         """
         super().__init__()
-        self._extract(task_dict)
+        self._task_id = task_id
+        self._question = self._extract_question(baseline_task_dict, sample_task_dict)
+        self._baseline_answer = self._extract_answer(baseline_task_dict)
+        self._baseline_contexts = self._extract_baseline_contexts(baseline_task_dict["CONTEXTS"])
+        self._sample_answer = self._extract_answer(sample_task_dict)
+        self._sample_contexts = self._extract_sample_contexts(sample_task_dict["CONTEXTS"])
 
-    def _extract(self, task_dict: Dict[str, Any]) -> None:
+    def _extract_question(self, baseline_task_dict: Dict[str, Any], sample_task_dict: Dict[str, Any]) -> str:
         """
-        Extract information from the task dictionary.
+        Extract the question from the task dictionaries.
 
-        Args:
+        Parameters:
+        baseline_task_dict (Dict[str, Any]): The dictionary containing baseline task information.
+        sample_task_dict (Dict[str, Any]): The dictionary containing sample task information.
+
+        Returns:
+        str: The question associated with the task.
+
+        Raises:
+        AssertionError: If the questions in the baseline and sample task dictionaries do not match.
+        """
+        assert baseline_task_dict["QUESTION"] == sample_task_dict["QUESTION"], "Questions of baseline and sample do not belong to one task!"
+        return baseline_task_dict["QUESTION"]
+
+    def _extract_answer(self, task_dict: Dict[str, Any]) -> str:
+        """
+        Extract the answer from the task dictionary.
+
+        Parameters:
         task_dict (Dict[str, Any]): The dictionary containing task information.
+
+        Returns:
+        str: The answer associated with the task.
         """
-        self._id = next(iter(task_dict))
-        task_info = task_dict[self._id]
-        self._question = task_info["QUESTION"]
-        self._answer = task_info["ANSWER"]
-        self._extract_contexts(task_info["CONTEXTS"])
+        return task_dict["ANSWER"]
 
-    def _extract_contexts(self, context_dicts: List[Dict[str, Any]]) -> None:
+    def _extract_baseline_contexts(self, baseline_context_dict: List[Dict[str, Any]]) -> List[CustomContext]:
         """
-        Extract contexts from the context dictionaries.
+        Extract baseline contexts from the context dictionary.
 
-        Args:
-        context_dicts (List[Dict[str, Any]]): The list of context dictionaries.
+        Parameters:
+        baseline_context_dict (List[Dict[str, Any]]): The list of dictionaries containing baseline context information.
+
+        Returns:
+        List[CustomContext]: A list of CustomContext objects.
         """
-        self._contexts = [CustomContext(context_dict) for context_dict in context_dicts]
+        return [CustomContext(context_dict) for context_dict in baseline_context_dict]
 
-class CustomRagTask(CustomTask):
-    """
-    Custom RAG task class for handling specific tasks with custom RAG contexts.
-
-    Attributes:
-    Inherits all attributes from CustomTask.
-
-    Methods:
-    Inherits all methods from CustomTask.
-    """
-
-    def __init__(self, task_dict: Dict[str, Any]) -> None:
+    def _extract_sample_contexts(self, sample_context_dict: List[Dict[str, Any]]) -> List[CustomRagContext]:
         """
-        Initialize the CustomRagTask with a task dictionary.
+        Extract sample contexts from the context dictionary.
 
-        Args:
-        task_dict (Dict[str, Any]): The dictionary containing task information.
+        Parameters:
+        sample_context_dict (List[Dict[str, Any]]): The list of dictionaries containing sample context information.
+
+        Returns:
+        List[CustomRagContext]: A list of CustomRagContext objects.
         """
-        super().__init__(task_dict)
+        return [CustomRagContext(context_dict) for context_dict in sample_context_dict]
 
-    def _extract_contexts(self, context_dicts: List[Dict[str, Any]]) -> None:
+    @property
+    def task_id(self) -> Union[int, str]:
         """
-        Extract contexts from the context dictionaries.
+        Get the unique identifier for the task.
 
-        Args:
-        context_dicts (List[Dict[str, Any]]): The list of context dictionaries.
+        Returns:
+        Union[int, str]: The unique identifier for the task, which can be an integer or string.
         """
-        self._contexts = [CustomRagContext(context_dict) for context_dict in context_dicts]
-
+        return self._task_id
 
 if __name__ == "__main__":
     import json
-    file_path = "data/customized_dataset/samples.json"
-    with open(file=file_path, mode='r', encoding='utf-8') as f:
-        ds_dict = json.load(f)
-    tasks = ds_dict["TASKS"]
+    baseline_data_path = "data/customized_dataset/baseline.json"
+    with open(baseline_data_path, "r") as f:
+        baseline_dataset = json.load(f)
+    sample_data_path = "data/customized_dataset/samples.json"
+    with open(sample_data_path, "r") as f:
+        sample_dataset = json.load(f)
 
-    task_id = next(iter(tasks))
-    a_task = CustomRagTask({task_id: tasks[task_id]})
-
-    print("task id:", a_task.id)
+    a_task = CustomTask("1", baseline_dataset["TASKS"]["1"], sample_dataset["TASKS"]["1"])
+    print("task id:", a_task.task_id)
     print("question:", a_task.question)
-    print("answer:", a_task.answer)
-    print("contexts: *", len(a_task.contexts))
+    print("baseline answer:", a_task.baseline_answer)
+    print("baseline contexts: *", len(a_task.baseline_contexts))
+    print("sample answer:", a_task.sample_answer)
+    print("sample contexts: *", len(a_task.sample_contexts))

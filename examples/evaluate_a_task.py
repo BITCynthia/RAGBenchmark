@@ -1,5 +1,5 @@
 from ragbenchmark.tasks.custom_task import CustomTask
-from ragbenchmark.evaluator.task_evaluator import TaskEvaluator
+from ragbenchmark.evaluator.task_evaluator.task_evaluator import TaskEvaluator
 
 def main():
     pass
